@@ -9,7 +9,8 @@ async function addMovieModel(movieData){
             moviedes:movieData.moviedes,
             movietype:movieData.movietype,
             moviedur:movieData.moviedur,
-            movietktcost:movieData.movietktcost
+            movietktcost:movieData.movietktcost,
+            moviedirector:movieData.moviedirector,
         });
         if(movieRes){
             return {success:true, message:'successfully added the movie'};

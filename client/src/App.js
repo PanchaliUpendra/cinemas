@@ -11,6 +11,7 @@ import AddTheaters from './Components/Addtheaters/AddTheaters';
 import Ticketadmhistory from './Components/Ticketadmhistory/Ticketadmhistory';
 import { useSelector } from 'react-redux';
 import Mytickets from './Components/Mytickets/Mytickets';
+import Schedule from './Components/Schedule/Schedule';
 
 function App() {
   const isLoggedIn = useSelector((state)=>state.userdata.isLoggedIn);
@@ -33,12 +34,13 @@ function App() {
             <Route path='/addmovies' element={<Addmovies/>}/>
             <Route path='/addtheaters' element={<AddTheaters/>}/>
             <Route path='/bookingdetails' element={<Bookingdetails/>}/>
+            <Route path='/schedule' element={<Schedule/>}/>
           </>
         }
         
         <Route path='/ticketadmhistory' element={<Ticketadmhistory/>}/>
         {
-          isLoggedIn && <Route path='/mytickets' element={<Mytickets/>}/>
+          isLoggedIn && userrole==='admin' && <Route path='/mytickets' element={<Mytickets/>}/>
         }
         
       </Routes>

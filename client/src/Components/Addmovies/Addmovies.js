@@ -20,7 +20,8 @@ function Addmovies(){
         moviedes:'',
         movietype:'',
         moviedur:0,
-        movietktcost:0
+        movietktcost:0,
+        moviedirector:''
     });
 
     //handle movie image upload
@@ -47,7 +48,7 @@ function Addmovies(){
         e.preventDefault();
         setshowloading(true);
         try{
-            if(movieData.moviename!=='' && movieData.moviedur>0 && movieData.moviedes!=='' && movieData.movietktcost>0 && movieData.movietype!=='' && movieImageFile!==''){
+            if(movieData.moviename!=='' && movieData.moviedur>0 && movieData.moviedes!==''  && movieData.movietype!=='' && movieImageFile!==''){
                 var fileurl='';
                 try{
                     const storageref = ref(storage,`movies/${movieData.moviename}`);
@@ -79,7 +80,7 @@ function Addmovies(){
                     });
                     const resData = await addmovieRes.json();
                     if(resData.success){
-                        alert(resData.message);
+                        // alert(resData.message);
                         setAllmovies(prev=>([{
                             ...movieData,
                             movieuid:uuid,
@@ -93,7 +94,8 @@ function Addmovies(){
                             moviedes:'',
                             movietype:'',
                             moviedur:0,
-                            movietktcost:0
+                            movietktcost:0,
+                            moviedirector:''
                         }));
                     }else{
                         alert(resData.message);
@@ -165,10 +167,10 @@ function Addmovies(){
                             }))}/>
                         </div>
                         <div className="addmovies-div-each">
-                            <label>Ticket cost</label>
-                            <input type='number' value={movieData.movietktcost} onChange={(e)=>setMovieData(prev=>({
+                            <label>movie director</label>
+                            <input type='text' placeholder="Enter Movie Director ..." value={movieData.moviedirector} onChange={(e)=>setMovieData(prev=>({
                                 ...prev,
-                                movietktcost:e.target.value
+                                moviedirector:e.target.value
                             }))}/>
                         </div>
                         <div className="addmovies-div-each">
@@ -201,7 +203,7 @@ function Addmovies(){
                                     <h1>{item.moviename}</h1>
                                     <p>{item.moviedes}</p>
                                     <p>movie duration: {item.moviedur}min</p>
-                                    <p>ticket cost: ${item.movietktcost}</p>
+                                    <p>movie director: {item.moviedirector?item.moviedirector:'not added'}</p>
                                     <p>type:{item.movietype}</p>
                                 </div>
                             ))

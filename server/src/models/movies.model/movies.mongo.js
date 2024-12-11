@@ -7,7 +7,8 @@ const moviesSchema = new mongoose.Schema({
     moviedes:String,
     movietype:String,
     moviedur:Number,
-    movietktcost:Number
+    movietktcost:Number,
+    moviedirector:String
 });
 
 const moviedatabase = mongoose.model('movies',moviesSchema);

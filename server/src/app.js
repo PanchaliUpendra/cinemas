@@ -5,6 +5,7 @@ const theaterRouter = require('./routers/theaters/theaters.router');
 const usersRouter = require('./routers/users/users.router');
 const moviesRouter = require('./routers/movies/movies.router');
 const bookingsRouter = require('./routers/bookings/bookings.router');
+const scheduleRouter = require('./routers/schedule/schedule.router');
 
 const app = express();
 
@@ -28,5 +29,6 @@ app.use('/theater',theaterRouter);
 app.use('/users',usersRouter);
 app.use('/movies',moviesRouter);
 app.use('/bookings',bookingsRouter);
+app.use('/schedule',scheduleRouter);
 
 module.exports = app;

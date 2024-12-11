@@ -51,6 +51,7 @@ function Homepage(){
                         <li onClick={()=>navigate('/addmovies')}>Add Movies</li>
                         <li onClick={()=>navigate('/addtheaters')}>Add Theaters</li>
                         <li onClick={()=>navigate('/bookingdetails')}>user bookings</li>
+                        <li onClick={()=>navigate('/schedule')}>schedule</li>
                     </ul>
                 }
                 

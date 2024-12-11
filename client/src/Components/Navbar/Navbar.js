@@ -13,6 +13,7 @@ function Navbar(){
     const dispatch = useDispatch();
     const fetchCheckOnlyOnce = useRef(false);
     const isLoggedIn = useSelector((state)=>state.userdata.isLoggedIn);
+    const userrole = useSelector((state)=>state.userdata.userrole);
     const [showloading,setShowloading] = useState(false);
     
 
@@ -75,7 +76,7 @@ function Navbar(){
                 </div>
                 <div className="navbar-login">
                     {
-                        isLoggedIn?<p onClick={()=>navigate('/mytickets')}>my tickets</p>:<p onClick={()=>navigate('/login')}>login</p>
+                        isLoggedIn?userrole==='admin'?<></>:<p onClick={()=>navigate('/mytickets')}>my tickets</p>:<p onClick={()=>navigate('/login')}>login</p>
                     }
                     
                     {

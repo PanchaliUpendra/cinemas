@@ -235,7 +235,7 @@ function Eachmovie(){
                         <p>{bookingDetails.moviedes}</p>
                         <p>Duration: {bookingDetails.moviedur} min</p>
                         <p>type:  {bookingDetails.movietype}</p>
-                        <p>ticket cost: ${bookingDetails.ticketcost}</p>
+                        <p>movie director:{bookingDetails.moviedirector?bookingDetails.moviedirector:'not added'}</p>
                     </div>
                     
                 </div>
