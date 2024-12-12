@@ -195,7 +195,7 @@
     font-weight: 500;
 }
 
-.eachmovie-booking-tickets-select>select{
+.eachmovie-booking-tickets-select>input , .eachmovie-booking-tickets-select>select{
     width: 170px;
     height: 28px;
     background-color: #14b565;
@@ -203,6 +203,7 @@
     border: none;
     outline: none;
     border-radius: 3px;
+    padding-left: 5px;
 }
 
 .eachmovie-booking-tickets-select>select option{

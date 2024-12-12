@@ -28,15 +28,12 @@ function App() {
         }
         <Route path='/eachmovie/:movieid' element={<Eachmovie/>}/>
         <Route path='/bookingdetails' element={<Bookingdetails/>}/>
-        {
-          isLoggedIn && userrole==='admin' && 
-          <>
+        
             <Route path='/addmovies' element={<Addmovies/>}/>
             <Route path='/addtheaters' element={<AddTheaters/>}/>
             <Route path='/bookingdetails' element={<Bookingdetails/>}/>
             <Route path='/schedule' element={<Schedule/>}/>
-          </>
-        }
+         
         
         <Route path='/ticketadmhistory' element={<Ticketadmhistory/>}/>
         {

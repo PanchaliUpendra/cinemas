@@ -1,0 +1,57 @@
+.schedule-create-form{
+    background: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 5px;
+    padding: 15px 10px;
+}
+
+.schedule-create-form>h1{
+    text-align: center;
+    font-size: 1rem;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.schedule-form-inner{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.schedule-form-each{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.schedule-form-each>label{
+    text-transform: capitalize;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.schedule-form-each>select,.schedule-form-each>input{
+    height: 28px;
+    border: none;
+    outline: none;
+    padding-left: 5px;
+    border-radius: 3px;
+    background-color: #e6e6e6;
+}
+
+.schedule-submit-btn{
+    margin-top: 15px;
+    border-radius: 3px;
+    padding: 3px 10px;
+    border: none;
+    background-color: blue;
+    color: white;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    cursor: pointer;
+}

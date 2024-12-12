@@ -1,7 +1,7 @@
 const express = require('express');
-const { addNewScheduleController } = require('./schedule.controller');
-const { getMovieScheduleData } = require('../../models/schedule.model/schedule.model');
+const { addNewScheduleController, getMovieScheduleController } = require('./schedule.controller');
+
 const scheduleRouter = express.Router();
 scheduleRouter.post('/addmovieschedule',addNewScheduleController);
-scheduleRouter.get('/getmovieschedule/:movieid',getMovieScheduleData);
+scheduleRouter.get('/getmovieschedule/:movieid',getMovieScheduleController);
 module.exports = scheduleRouter;

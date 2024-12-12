@@ -3,7 +3,7 @@ import './Eachmovie.css';
 import Navbar from "../Navbar/Navbar";
 // import Movieposter from '../../Assets/salaar.jpg';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { API_URL, Shows } from "../../Docs/Data";
+import { API_URL} from "../../Docs/Data";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { storeAllTheatersData } from "../../ReduxStates/Theatersdata";
@@ -22,7 +22,8 @@ function Eachmovie(){
     const username = useSelector((state)=>state.userdata.username);
     const useremail = useSelector((state)=>state.userdata.useremail);
     const [showloading,setshowloading] = useState(false);
-    const [nextDates,setNextDates] = useState([]);
+    // const [nextDates,setNextDates] = useState([]);
+    const [scheduleData,setScheduleData] = useState([]);
     const [bookingDetails,setBookingDetails] = useState({
         userid:'',
         bookinguid:'',
@@ -85,8 +86,33 @@ function Eachmovie(){
         setshowloading(false);
     }
 
+    function handlefunFindTheater(edata){
+        const tempans = scheduleData.find((item)=>item.theateruid===edata.theateruid);
+        return tempans?true:false;
+    }
+
+    function handleGenerateTheDates(tempDate){
+        const startDate = new Date(tempDate);
+            const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+            const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+        
+            const currentDate = new Date(startDate); // Copy the start date
+            currentDate.setDate(startDate.getDate() + 0); // Increment by i days
+            return {
+                wholedate: currentDate.toISOString().split('T')[0],
+                day: days[currentDate.getDay()],
+                date: currentDate.getDate(),
+                month: months[currentDate.getMonth()],
+                year: currentDate.getFullYear(),
+            }
+    }
+
     
     useEffect(()=>{
+         window.scrollTo({
+            top: 0,
+            behavior: "smooth", // Smooth scrolling
+          });
             async function fetchEachMovieData(){
                 try{
                     const movieres = await  fetch(`${API_URL}/movies/geteachmovie/${movieid}`,{
@@ -100,7 +126,7 @@ function Eachmovie(){
                             ...prev,
                             moviename:resData.movie.moviename,
                             movieuid:resData.movie.movieuid,
-                            ticketcost:resData.movie.movietktcost,
+                            ticketcost:0,
                             moviedes:resData.movie.moviedes,
                             moviedur:resData.movie.moviedur,
                             movietype:resData.movie.movietype,
@@ -112,30 +138,50 @@ function Eachmovie(){
                 }
             }
             fetchEachMovieData();
-        const generateNextFiveDays = () => {
-            const startDate = new Date();
-            const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-            const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-        
-            const result = [];
-        
-            for (let i = 0; i < 5; i++) {
-                const currentDate = new Date(startDate); // Copy the start date
-                currentDate.setDate(startDate.getDate() + i); // Increment by i days
-        
-                result.push({
-                    wholedate: currentDate.toISOString().split('T')[0],
-                    day: days[currentDate.getDay()],
-                    date: currentDate.getDate(),
-                    month: months[currentDate.getMonth()],
-                    year: currentDate.getFullYear(),
-                });
+
+            if(movieid!==''){
+                async function fetchScheduleData(){
+                    try{
+                        const scheduleres = await fetch(`${API_URL}/schedule/getmovieschedule/${movieid}`,{credentials:'include'});
+                        const resData = await scheduleres.json();
+                        if(resData.success){
+                            setScheduleData(resData.moiveschedule);
+                        }else{
+                            console.log(resData.message);
+                        }
+                    }catch(err){
+                        console.log('getting an error while fetching movie schedule data',err);
+                    }
+                }
+                fetchScheduleData();
             }
+            
+
+        // const generateNextFiveDays = () => {
+        //     const startDate = new Date();
+        //     const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+        //     const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
         
-            setNextDates(result);
-        };
-        generateNextFiveDays();//generating next five days
+        //     const result = [];
+        
+        //     for (let i = 0; i < 5; i++) {
+        //         const currentDate = new Date(startDate); // Copy the start date
+        //         currentDate.setDate(startDate.getDate() + i); // Increment by i days
+        
+        //         result.push({
+        //             wholedate: currentDate.toISOString().split('T')[0],
+        //             day: days[currentDate.getDay()],
+        //             date: currentDate.getDate(),
+        //             month: months[currentDate.getMonth()],
+        //             year: currentDate.getFullYear(),
+        //         });
+        //     }
+        
+        //     setNextDates(result);
+        // };
+        // generateNextFiveDays();//generating next five days
         if(!fetchCheckOnlyOnce.current){
+            
 
             if(allTheatersData.length===0){
                 async function handleFetchTheaters(){
@@ -173,7 +219,7 @@ function Eachmovie(){
                             <div className="eachmovie-theaters-all">
                                 {
                                     allTheatersData.length>0 && 
-                                    allTheatersData.map((theateritem,idx)=>(
+                                    allTheatersData.filter((dtsfinditem)=>handlefunFindTheater(dtsfinditem)).map((theateritem,idx)=>(
                                         <div className={`eachmovie-theaters-each ${theateritem.theateruid===bookingDetails.theateruid?'active-theater':''}`} key={idx} onClick={(e)=>setBookingDetails(prev=>({
                                             ...prev,
                                             theateruid:theateritem.theateruid,
@@ -188,46 +234,73 @@ function Eachmovie(){
                             </div>
                         </div>
 
-                        <div className="eachmovie-dates">
-                            <h1>Dates</h1>
-                            <div className="eachmovie-dates-all">
-                                {
-                                    nextDates.map((item,idx)=>(
-                                        <div className={`eachmovie-dates-each ${item.wholedate===bookingDetails.date?'active-datesdata':''}`} key={idx} onClick={()=>setBookingDetails(prev=>({
-                                            ...prev,
-                                            date:item.wholedate
-                                        }))}>
-                                            <div className="eachmovie-dates-date-month">
-                                                <p>{item.date}</p>
-                                                <p>{item.month}</p>
+                        {
+                            bookingDetails.theateruid!=='' && 
+                            <div className="eachmovie-dates">
+                                <h1>Dates</h1>
+                                <div className="eachmovie-dates-all">
+                                    {
+                                        // nextDates.map((item,idx)=>(
+                                        //     <div className={`eachmovie-dates-each ${item.wholedate===bookingDetails.date?'active-datesdata':''}`} key={idx} onClick={()=>setBookingDetails(prev=>({
+                                        //         ...prev,
+                                        //         date:item.wholedate
+                                        //     }))}>
+                                        //         <div className="eachmovie-dates-date-month">
+                                        //             <p>{item.date}</p>
+                                        //             <p>{item.month}</p>
+                                        //         </div>
+                                        //         <p>{item.day}</p>
+                                        //     </div>
+                                        // ))
+                                        scheduleData.filter((ditem)=>ditem.theateruid===bookingDetails.theateruid).map((moviedates,idx)=>(
+                                            <div className={`eachmovie-dates-each ${moviedates.showdate===bookingDetails.date?'active-datesdata':''}`} key={idx} onClick={()=>setBookingDetails(prev=>({
+                                                         ...prev,
+                                                         date:moviedates.showdate
+                                                }))}>
+                                                <div className="eachmovie-dates-date-month">
+                                                     <p>{handleGenerateTheDates(moviedates.showdate).date}</p>
+                                                     <p>{handleGenerateTheDates(moviedates.showdate).month}</p>
+                                                 </div>
+                                                 <p>{handleGenerateTheDates(moviedates.showdate).day}</p>
                                             </div>
-                                            <p>{item.day}</p>
-                                        </div>
-                                    ))
-                                }
+                                        ))
+                                    }
+                                </div>
                             </div>
-                        </div>
-
-                        <div className="eachmovie-shows">
-                            <h1>Time</h1>
-                            <div className="eachmovie-shows-all">
-                                {
-                                    Shows.map((item,idx)=>(
-                                        <div className={`eachmovie-shows-each ${item.start===bookingDetails.starttime?'active-timedata':''}`} key={idx} onClick={()=>setBookingDetails(prev=>({
-                                            ...prev,
-                                            starttime:item.start,
-                                            endtime:item.end
-                                        }))}>
-                                            <input type="time" value={item.start} readOnly/>
-                                            <p>-</p>
-                                            <input type="time" value={item.end} readOnly/>
-                                        </div>
-                                    ))
-                                }
+                        }
+                        {
+                           bookingDetails.theateruid!=='' &&  bookingDetails.date!=='' && 
+                            <div className="eachmovie-shows">
+                                <h1>Time</h1>
+                                <div className="eachmovie-shows-all">
+                                    {
+                                        // Shows.map((item,idx)=>(
+                                        //     <div className={`eachmovie-shows-each ${item.start===bookingDetails.starttime?'active-timedata':''}`} key={idx} onClick={()=>setBookingDetails(prev=>({
+                                        //         ...prev,
+                                        //         starttime:item.start,
+                                        //         endtime:item.end
+                                        //     }))}>
+                                        //         <input type="time" value={item.start} readOnly/>
+                                        //         <p>-</p>
+                                        //         <input type="time" value={item.end} readOnly/>
+                                        //     </div>
+                                        // ))
+                                        scheduleData.filter((showfltr)=>(showfltr.theateruid===bookingDetails.theateruid && showfltr.showdate===bookingDetails.date)).map((showtimes,idx)=>(
+                                            <div className={`eachmovie-shows-each ${showtimes.showtime===bookingDetails.starttime?'active-timedata':''}`} key={idx} 
+                                            onClick={()=>setBookingDetails(prev=>({
+                                                 ...prev,
+                                                 starttime:showtimes.showtime,
+                                                 ticketcost:showtimes.ticketcost,
+                                             }))}>
+                                                <input type="time" value={showtimes.showtime} readOnly/>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
-                    <div className="eachmovie-con-second">
+                    <div className="eachmovie-con-second" style={{maxWidth:300}}>
                         <div className="eachmovie-image">
                             <img src={bookingDetails.movieimgurl} alt='each-movie-poster'/>
                         </div>
@@ -245,17 +318,18 @@ function Eachmovie(){
                         <div className="eachmovie-booking-tickets">
                             <div className="eachmovie-booking-tickets-select">
                                 <label>Total tickets</label>
-                                <select value={bookingDetails.totaltickets} onChange={(e)=>setBookingDetails(prev=>({
+                                <input type='number' value={bookingDetails.totaltickets} onChange={(e)=>setBookingDetails(prev=>({
                                     ...prev,
                                     totaltickets:e.target.value
-                                }))}>
+                                }))}/>
+                                {/* <select >
                                     <option value={1}>1</option>
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>
                                     <option value={4}>4</option>
                                     <option value={5}>5</option>
                                     <option value={6}>6</option>
-                                </select>
+                                </select> */}
                             </div>
                         </div>:<p className="eachmovie-pleaselogin">please <span onClick={()=>navigate('/login')}>signIn</span></p>)
                     }

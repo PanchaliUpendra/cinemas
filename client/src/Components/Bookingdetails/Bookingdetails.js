@@ -45,7 +45,7 @@ function Bookingdetails(){
                                         <div className="mytickets-outer-each">
                                             <div className="mytickets-inner-each">
                                                 <p>date</p>
-                                                <h2>{tkts.date}</h2>
+                                                <h2>{tkts.date?tkts.date.split('T')[0]:''}</h2>
                                             </div>
                                             <div className="mytickets-inner-each">
                                                 <p>hours</p>
