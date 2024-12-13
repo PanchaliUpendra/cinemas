@@ -15,7 +15,7 @@ import Schedule from './Components/Schedule/Schedule';
 
 function App() {
   const isLoggedIn = useSelector((state)=>state.userdata.isLoggedIn);
-  const userrole = useSelector((state)=>state.userdata.userrole);
+  // const userrole = useSelector((state)=>state.userdata.userrole);
   return (
     <BrowserRouter>
       <Routes>
@@ -36,9 +36,8 @@ function App() {
          
         
         <Route path='/ticketadmhistory' element={<Ticketadmhistory/>}/>
-        {
-          isLoggedIn && userrole==='admin' && <Route path='/mytickets' element={<Mytickets/>}/>
-        }
+        <Route path='/mytickets' element={<Mytickets/>}/>
+        
         
       </Routes>
     </BrowserRouter>
